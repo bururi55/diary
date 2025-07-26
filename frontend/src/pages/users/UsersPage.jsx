@@ -25,25 +25,32 @@ const UsersPageContainer = ({ className }) => {
       return;
     }
 
-    Promise.all([request('/users'), request('/users/roles')]).then(
-      ([usersRes, rolesRes]) => {
+    Promise.all([request('/users'), request('/users/roles')])
+      .then(([usersRes, rolesRes]) => {
         if (usersRes.error || rolesRes.error) {
           setErrorMessage(usersRes.error || rolesRes.error);
           return;
         }
         setUsers(usersRes.data);
         setRoles(rolesRes.data);
-      }
-    );
+      })
+      .catch((error) => {
+        setErrorMessage(error.message);
+      });
   }, [shouldUpdateUserList, userRole]);
 
   const onUserRemove = (userId) => {
     if (!checkAccess([ROLE.ADMIN], userRole)) {
       return;
     }
-    request(`/users/${userId}`, 'DELETE').then(() => {
-      setShouldUpdateUserList(!shouldUpdateUserList);
-    });
+
+    request(`/users/${userId}`, 'DELETE')
+      .then(() => {
+        setShouldUpdateUserList(!shouldUpdateUserList);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -91,9 +98,9 @@ export const UsersPage = styled(UsersPageContainer)`
   margin: 0 auto;
   width: 570px;
 
-
   H2 {
-  margin-top: 120px}
+    margin-top: 120px;
+  }
 
   .login-column,
   .registered-at-column,
@@ -101,4 +108,5 @@ export const UsersPage = styled(UsersPageContainer)`
     display: flex;
     align-items: center;
     gap: 5px;
+  }
 `;

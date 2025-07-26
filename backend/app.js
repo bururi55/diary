@@ -3,18 +3,27 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const path = require("path");
 const routes = require("./routes");
 
 const port = 5000;
 const app = express();
 
-app.use(cors());
-app.use(express.static("../frontend/dist"));
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
+
+app.use(express.static(path.resolve("..", "frontend", "dist")));
 app.use(cookieParser());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 app.use("/api", routes);
 
-app.get("*", (req, res) => {
+app.get("/{*any}", (req, res) => {
   res.sendFile(path.resolve("..", "frontend", "dist", "index.html"));
 });
 

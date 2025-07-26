@@ -13,9 +13,12 @@ const ROLES = require("../constants/roles");
 const router = express.Router({ mergeParams: true });
 
 router.get("/", authenticated, hasRole([ROLES.ADMIN]), async (req, res) => {
-  const users = await getUsers();
-
-  res.send({ data: users.map(mapUser) });
+  try {
+    const users = await getUsers();
+    res.send({ data: users.map(mapUser) });
+  } catch (error) {
+    res.status(500).send({ error: error.message });
+  }
 });
 
 router.get(
@@ -23,9 +26,12 @@ router.get(
   authenticated,
   hasRole([ROLES.ADMIN]),
   async (req, res) => {
-    const roles = getRoles();
-
-    res.send({ data: roles });
+    try {
+      const roles = getRoles();
+      res.send({ data: roles });
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
   }
 );
 
@@ -34,11 +40,14 @@ router.patch(
   authenticated,
   hasRole([ROLES.ADMIN]),
   async (req, res) => {
-    const newUser = await updateUser(req.params.id, {
-      role: req.body.roleId,
-    });
-
-    res.send({ data: mapUser(newUser) });
+    try {
+      const newUser = await updateUser(req.params.id, {
+        role: req.body.roleId,
+      });
+      res.send({ data: mapUser(newUser) });
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
   }
 );
 
@@ -47,9 +56,12 @@ router.delete(
   authenticated,
   hasRole([ROLES.ADMIN]),
   async (req, res) => {
-    await deleteUser(req.params.id);
-
-    res.send({ error: null });
+    try {
+      await deleteUser(req.params.id);
+      res.send({ error: null });
+    } catch (error) {
+      res.status(500).send({ error: error.message });
+    }
   }
 );
 
