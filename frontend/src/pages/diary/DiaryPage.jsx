@@ -220,7 +220,6 @@ const DiaryPageContainer = ({ className }) => {
                     ))}
                   </ProductList>
                 </td>
-                {userRole === ROLE.ADMIN && (
                   <td>
                     {editEntryId === entry._id ? (
                       <Icon
@@ -246,7 +245,6 @@ const DiaryPageContainer = ({ className }) => {
                       </>
                     )}
                   </td>
-                )}
               </tr>
             ))
           ) : (
