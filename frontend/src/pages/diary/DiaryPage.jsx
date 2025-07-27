@@ -3,10 +3,9 @@ import styled from 'styled-components';
 import { Header, Footer, Icon, H2, Pagination } from '../../components';
 import { request } from '../../utils';
 import { useSelector } from 'react-redux';
-import { selectUserEmail, selectUserRole } from '../../selectors';
+import { selectUserEmail } from '../../selectors';
 import * as XLSX from 'xlsx';
 import { PAGINATION_LIMIT_DIARY } from '../../constants';
-import { ROLE } from '../../constants';
 import excelIcon from '/src/assets/icons/excel-icon.png';
 import saveIcon from '/src/assets/icons/save-icon.png';
 import editProductIcon from '/src/assets/icons/edit-product-icon.png';
@@ -19,7 +18,7 @@ const DiaryPageContainer = ({ className }) => {
   const [editEntryId, setEditEntryId] = useState(null);
   const [editEntryData, setEditEntryData] = useState({});
   const userEmail = useSelector(selectUserEmail);
-  const userRole = useSelector(selectUserRole);
+  
 
   useEffect(() => {
     const fetchDiaryEntries = async () => {
@@ -137,7 +136,7 @@ const DiaryPageContainer = ({ className }) => {
             <th>Длинный инсулин</th>
             <th>Комментарий</th>
             <th>Продукты</th>
-            {userRole === ROLE.ADMIN && <th>Действия</th>}
+            <th>Действия</th>
           </tr>
         </thead>
         <tbody>
